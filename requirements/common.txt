@@ -1,0 +1,35 @@
+django-cors-headers==3.11.0
+  Django==4.0.3
+    asgiref==3.5.0
+    backports.zoneinfo==0.2.1
+    sqlparse==0.4.2
+django-phonenumber-field==6.1.0
+  Django==4.0.3
+    asgiref==3.5.0
+    backports.zoneinfo==0.2.1
+    sqlparse==0.4.2
+djangorestframework-simplejwt==5.1.0
+  Django==4.0.3
+    asgiref==3.5.0
+    backports.zoneinfo==0.2.1
+    sqlparse==0.4.2
+  djangorestframework==3.13.1
+    Django==4.0.3
+      asgiref==3.5.0
+      backports.zoneinfo==0.2.1
+      sqlparse==0.4.2
+    pytz==2022.1
+  PyJWT==2.3.0
+Markdown==3.3.6
+  importlib-metadata==4.11.3
+    zipp==3.8.0
+phonenumberslite==8.12.46
+pkg-resources==0.0.0
+pyotp==2.6.0
+python-dotenv==0.20.0
+requests==2.27.1
+  certifi==2021.10.8
+  charset-normalizer==2.0.12
+  idna==3.3
+  urllib3==1.26.9
+smart-getenv==1.1.0
