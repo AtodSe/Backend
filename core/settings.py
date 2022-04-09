@@ -51,7 +51,8 @@ APP_DESCRIPTION = 'RESTfull API backend for Bahoo service'
 MY_APPS = [
     'api',
     'api.users',
-    'api.authentication'
+    'api.authentication',
+    'api.invoice',
 ]
 
 INSTALLED_APPS = [
