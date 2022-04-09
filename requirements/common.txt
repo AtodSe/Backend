@@ -24,7 +24,6 @@ Markdown==3.3.6
   importlib-metadata==4.11.3
     zipp==3.8.0
 phonenumberslite==8.12.46
-pkg-resources==0.0.0
 pyotp==2.6.0
 python-dotenv==0.20.0
 requests==2.27.1
