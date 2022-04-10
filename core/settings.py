@@ -15,6 +15,9 @@ from pathlib import Path
 
 from corsheaders.defaults import default_headers, default_methods
 from smart_getenv import getenv
+from dotenv import load_dotenv
+
+load_dotenv('.env', override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,13 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 DEBUG = getenv('DEBUG', type=bool, default=True)
-
-if DEBUG:
-    try:
-        from dotenv import load_dotenv
-        load_dotenv('.env')
-    except:
-        pass
 
 SECRET_KEY = getenv(
     'SECRET_KEY',
@@ -107,22 +103,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('DB_NAME', default='bahoodb'),
+        'USER': getenv('DB_USER'),
+        'PASSWORD': getenv('DB_PASSWORD'),
+        'HOST': getenv('DB_HOST'),
+        'PORT': getenv('DB_PORT'),
+        'CONN_MAX_AGE': getenv('DB_CONN_MAX_AGE', type=int, default=0),
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': getenv('DB_NAME', default='vcdb'),
-#         'USER': getenv('DB_USER'),
-#         'PASSWORD': getenv('DB_PASSWORD'),
-#         'HOST': getenv('DB_HOST'),
-#         'PORT': getenv('DB_PORT'),
-#         'CONN_MAX_AGE': getenv('DB_CONN_MAX_AGE', type=int, default=0),
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -222,7 +211,7 @@ SIMPLE_JWT = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = getenv('TIME_ZONE', default='UTC')
 
 USE_I18N = True
 

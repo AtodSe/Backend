@@ -10,8 +10,15 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     username = PhoneNumberField(unique=True)
-    key = models.CharField(max_length=16, default=random_base32)
+    key = models.CharField(max_length=32, default=random_base32)
     REQUIRED_FIELDS = []
+
+    class Meta:
+        managed = True
+        abstract = False
+        db_table = 'users'
+        verbose_name = "user"
+        verbose_name_plural = "users"
 
     def verify_otp(self, otp: str) -> bool:
         if not otp:
