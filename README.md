@@ -11,122 +11,79 @@ The project is Dockerized
 
 ## Prerequisites
 
-- Python 3.7+
+- Python 3.9+
 - Django
 - Django Rest Framework
 - Docker
 
 
-## Installing
+## Installing for Development
 
 After cloning the project we setup a virtual environment and install dependencies
 
-```
+```sh
 $ python3 -m venv .venv
 $ source .venv/bin/activate
-$ python install -r requirements.txt
-
-# django-celery-beats' current dependency is Django>=2.2,<4.0
-# there is a fix on master repo but not released so we install from git
-$ pip install git+https://github.com/celery/django-celery-beat.git
-```
-
-Build a docker image
-
-```
-$ docker-compose -f docker/docker-compose.yml -p video_converter build
-```
-
-Migrate the changes using the web container.
-
-```
-$ docker-compose -f docker/docker-compose.yml -p video_converter run web --migrate
-```
-
-Create a Django superuser, make sure to replace the `EMAIL` and `USERNAME`.
-
-```
-$ docker-compose -f docker/docker-compose.yml -p video_converter run web python manage.py createsuperuser --email EMAIL --username USERNAME
+$ python install -r requirements/dev.txt
+$ touch .env # add required environment variables here
+$ docker run -p 5432:5432 --env-file .env --name postgre -h db -d postgres:14.2-alpine
+$ docker/docker-entrypoint.sh --migrate python manage.py runserver
 ```
 
 ## Running the Server
 
-```
-$ docker-compose -f docker/docker-compose.yml -p video_converter up -d
+```sh
+$ docker compose -f docker/docker-compose.yml -p bahoo up -d
 ```
 
 
 # Project structure                                                     
 
 ```
-[project_name]
+Bahoo
 ├── docker
 │   ├── docker-compose.yml
 │   ├── docker-entrypoint.sh
 │   └── Dockerfile
-├── apps
+├── api
 │   ├── authentication
-│   │   ├── migrations
-│   │   ├── apps.py
-│   │   ├── serializers.py
-│   │   ├── urls.py
-│   │   └── views.py
-│   └── video
-│       ├── migrations
-│       ├── apps.py
-│       ├── models.py
-│       ├── serializers.py
-│       ├── tasks.py
-│       ├── urls.py
-│       └── views.py
-├── config
+│   ├── invoice
+│   └── users
+├── core
 │   ├── asgi.py
-│   ├── celery.py
+│   ├── exception_handler.py
+│   ├── models.py
+│   ├── renderer.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── core
-│   ├── middlewares.py
-│   ├── utils.py
-│   └── validators.py
-├── media
-│   ├── converted
-│   └── source
+├── requirements
+│   ├── common.txt
+│   ├── dev.txt
+│   └── prod.txt
 ├── manage.py
-├── nginx.conf
-├── README.md
-├── requirements.txt
-└── supervisord.conf
+└── README.md
 ```
 
 The `docker/` directory is where are the configuration files needed to run the application with docker.
 
-The `config/` contains The configuration root of the project, where project-wide settings, `urls.py`, `celery.py`, and `wsgi.py` modules are placed.
+The `core/` contains The configuration root of the project, where project-wide settings, `urls.py`, `renderer.py`, `exception_handler.py`, `models.py` and `wsgi.py` modules are placed.
 
-The `core/` contains The common problem solutions like `middlewares.py`, `permissions.py`, etc.
+The `api/` contains Django applications which are `authentication`, `invoice` and `users`
 
-The `media/source` contains all the uploaded videos sent by users which are in queue to be converted or are converting
-
-The `media/converted` contains all the converted videos which can be downloaded by the user
-
-The `apps/` contains Django applications which are `authentication` and `video`
-
-| App               | Purpose       |
+| Api               | Purpose       |
 | ----------------- | ------------- |
 | `authentication`  | Used for user registration, authentication and refreshing JWT tokens|
-| `video`           | Manages user submitted videos for conversion. used to upload a video or query a list or a specific video|
+| `invoice`         | Manages user invoices, each invoices holds multiple transactions and reminders|
+| `users`           | Customizes `User` model |
 
 
 # Built With
 
 - [Django](https://www.djangoproject.com) - The web framework
 - [Django Rest Framework](https://www.django-rest-framework.org) - The REST frame work
-- [Celery](https://docs.celeryproject.org) - Task Queue
-- [RabbitMQ](https://www.rabbitmq.com) - Message Broker
 - [PostgresSQL](https://www.postgresql.org) - Database
 - [Adminer](https://www.adminer.org) - Database Manager
-- [NginX](https://www.nginx.com) - Serve converted files
-- [django-yasg](https://drf-yasg.readthedocs.io) - Auto generate swagger documentation
 
 # Authors
 
