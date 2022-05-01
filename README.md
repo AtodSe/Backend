@@ -1,4 +1,4 @@
-# MyDong Backend Server
+# Bahoo Backend Server
 REST API server hosting `Bahoo` service.
 The Project is written in `Python` and is based on `Django` and `Django Rest Framework`
 
