@@ -49,6 +49,9 @@ MY_APPS = [
     'api.users',
     'api.authentication',
     'api.invoice',
+    'api.tag',
+    'api.reminder',
+    'api.transaction',
 ]
 
 INSTALLED_APPS = [

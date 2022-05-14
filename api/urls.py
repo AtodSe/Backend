@@ -21,5 +21,5 @@ from .invoice import urls as invoice_urls
 
 urlpatterns = [
     path('auth/', include((authentication_urls, 'api.authentication'), namespace='authentication')),
-    path('invoices/', include((invoice_urls, 'api.invoice'), namespace='invoices'))
+    path('invoices/', include((invoice_urls, 'api.invoice'), namespace='invoices')),
 ]
