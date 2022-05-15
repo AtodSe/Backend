@@ -5,10 +5,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import OtpViewSet
+from .views import OtpViewSet, AuthViewSet
 
 
 router = DefaultRouter()
+router.register(r'', AuthViewSet, basename='auth')
 router.register(r'otp', OtpViewSet, basename='otp')
 
 urlpatterns = router.urls

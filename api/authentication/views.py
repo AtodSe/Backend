@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 
 from .serializers import SendOtp, SignInOtp
 
@@ -22,3 +23,16 @@ class OtpViewSet(GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.sign_in(), status=status.HTTP_200_OK)
+
+
+class AuthViewSet(GenericViewSet):
+
+    permission_classes = []
+
+    @action(methods=SAFE_METHODS, detail=False)
+    def status(self, request, *args, **kwargs):
+        if bool(request.user and request.user.is_authenticated):
+            return Response(None, status=status.HTTP_200_OK)
+        else:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
