@@ -1,7 +1,13 @@
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, mixins
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
+
 from .serializers import InvoiceSerializer
+from ..transaction.models import Transaction
+from ..transaction.serializers import TransactionSerializer
 
 class InvoiceViewSet(mixins.RetrieveModelMixin,
                      mixins.ListModelMixin,
@@ -11,6 +17,13 @@ class InvoiceViewSet(mixins.RetrieveModelMixin,
                      GenericViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = InvoiceSerializer
+
+    @action(methods=['get'], detail=True, serializer_class=TransactionSerializer)
+    def transactions(self, request, *args, **kwargs):
+        invoice = self.get_object()
+        serializer = self.get_serializer(Transaction.objects.filter(reminder__in=invoice.reminders.all()), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     def get_queryset(self):
         user = self.request.user
