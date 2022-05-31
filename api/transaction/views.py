@@ -21,7 +21,7 @@ class TransactionViewset(mixins.RetrieveModelMixin,
         transaction = serializer.save(reminder_id=reminder_id)
         # Update invoice balance
         invoice = transaction.reminder.invoice
-        invoice.balance -= transaction.price
+        invoice.balance += transaction.price
         invoice.save()
 
 

@@ -13,4 +13,4 @@ class ReminderSerializer(ModelSerializer):
         read_only_fields = ['updated_at', 'created_at']
 
     def get_spent_percentage(self, reminder):
-        return reminder.transactions.aggregate(Sum('price', default=0))['price__sum'] / reminder.balance * 100.0
+        return reminder.transactions.aggregate(Sum('price', default=0))['price__sum'] / reminder.balance * -100.0
