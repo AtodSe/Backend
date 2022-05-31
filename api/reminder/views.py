@@ -20,6 +20,12 @@ class ReminderViewset(mixins.RetrieveModelMixin,
         serializer.save(invoice_id=invoice_id)
 
 
+    def perform_destroy(self, instance):
+        for transaction in instance.transactions.all():
+            transaction.delete()
+        instance.delete()
+
+
     def get_queryset(self):
         invoice_id = self.kwargs.get('invoice_id')
         try:

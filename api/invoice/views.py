@@ -25,6 +25,14 @@ class InvoiceViewSet(mixins.RetrieveModelMixin,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+    def perform_destroy(self, instance):
+        for reminder in instance.reminders.all():
+            for transaction in reminder.transactions.all():
+                transaction.delete()
+            reminder.delete()
+        instance.delete()
+
+
     def get_queryset(self):
         user = self.request.user
         return user.invoices.all()
