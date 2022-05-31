@@ -18,7 +18,11 @@ class TransactionViewset(mixins.RetrieveModelMixin,
 
     def perform_create(self, serializer):
         reminder_id = self.kwargs.get('reminder_id')
-        serializer.save(reminder_id=reminder_id)
+        transaction = serializer.save(reminder_id=reminder_id)
+        # Update invoice balance
+        invoice = transaction.reminder.invoice
+        invoice.balance -= transaction.price
+        invoice.save()
 
 
     def get_queryset(self):
