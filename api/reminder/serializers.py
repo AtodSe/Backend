@@ -16,6 +16,5 @@ class ReminderSerializer(ModelSerializer):
     def get_spent(self, reminder):
         return reminder.transactions.aggregate(Sum('price', default=0))['price__sum']
 
-
     def get_spent_percentage(self, reminder):
         return reminder.transactions.aggregate(Sum('price', default=0))['price__sum'] / reminder.balance * -100.0
