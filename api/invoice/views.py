@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
 
-from .serializers import InvoiceSerializer
+from .serializers import InvoiceSerializer, InvoiceStatisticsSerializer
 from ..transaction.models import Transaction
 from ..transaction.serializers import TransactionSerializer
 
@@ -30,6 +30,13 @@ class InvoiceViewSet(mixins.RetrieveModelMixin,
             queryset = queryset.filter(tags__in=has_tag).distinct()
 
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    @action(methods=['get'], detail=True, serializer_class=InvoiceStatisticsSerializer)
+    def statistics(self, request, *args, **kwargs):
+        invoice = self.get_object()
+        serializer = self.get_serializer(invoice)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
