@@ -1,5 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.timezone import now
 
 from ..reminder.models import Reminder
 from ..tag.models import Tag
@@ -12,7 +13,7 @@ class Transaction(SoftDeleteModel):
     color = models.CharField(max_length=7, default='#070707', validators=[RegexValidator(regex=r'^#([0-9a-fA-F]{2}){3}$', message='color must be in this format #xxxxxx', code='hex_regex')])
     price = models.BigIntegerField(default=0)
     tags = models.ManyToManyField(Tag, blank=True, related_name='transactions')
-    transaction_at = models.DateTimeField(auto_now_add=True)
+    transaction_at = models.DateTimeField(default=now)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)  
     updated_at = models.DateTimeField(auto_now=True)
 
