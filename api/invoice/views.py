@@ -18,10 +18,18 @@ class InvoiceViewSet(mixins.RetrieveModelMixin,
     permission_classes = (IsAuthenticated,)
     serializer_class = InvoiceSerializer
 
+
     @action(methods=['get'], detail=True, serializer_class=TransactionSerializer)
     def transactions(self, request, *args, **kwargs):
         invoice = self.get_object()
-        serializer = self.get_serializer(Transaction.objects.filter(reminder__in=invoice.reminders.all()), many=True)
+        queryset = Transaction.objects.filter(reminder__in=invoice.reminders.all())
+
+        has_tag = request.GET.get('has_tag', None)
+        if has_tag:
+            has_tag = has_tag.split(',')
+            queryset = queryset.filter(tags__in=has_tag).distinct()
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

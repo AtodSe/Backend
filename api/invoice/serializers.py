@@ -15,11 +15,14 @@ class InvoiceSerializer(ModelSerializer):
         model = Invoice
         fields = ['id', 'color', 'name', 'balance', 'total_spent', 'total_gain']
 
+
     def get_total_gain(self, obj):
         return Transaction.objects.filter(reminder__in=obj.reminders.values('id'), price__gte=0).aggregate(Sum('price', default=0))['price__sum']
 
+
     def get_total_spent(self, obj):
         return -Transaction.objects.filter(reminder__in=obj.reminders.values('id'), price__lt=0).aggregate(Sum('price', default=0))['price__sum']
+
 
     def create(self, validated_data):
         validated_data.update({'creator': self.context['request'].user})
